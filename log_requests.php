@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Log Requests
  * Description: Intercepta REST requests y los guarda en logs diarios usando error_log().
- * Version: 1.3.0
+ * Version: 1.2.3
  */
 
 define('RLM_LOG_DIR', WP_CONTENT_DIR . '/logs');
