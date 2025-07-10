@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Log Requests
  * Description: Intercepta REST requests y los guarda en logs diarios usando error_log().
- * Version: 1.2.2
+ * Version: 1.3.0
  */
 
 define('RLM_LOG_DIR', WP_CONTENT_DIR . '/logs');
@@ -62,7 +62,7 @@ function rlm_render_admin_page()
 	}
 
 	$log_files = array_reverse($log_files);
-	$selected = $_GET['log'] ?? basename(end($log_files));
+	$selected = $_POST['log'] ?? basename(reset($log_files));
 	$log_path = RLM_LOG_DIR . '/' . basename($selected);
 
 	// Obtener parámetros de búsqueda y filtros
@@ -76,8 +76,9 @@ function rlm_render_admin_page()
 	}
 
 	if (isset($_POST['delete_old_logs'])) {
+		$log_files = glob(RLM_LOG_DIR . '/rest_*.log');
 		foreach ($log_files as $file) {
-			if (filemtime($file) < strtotime("-$days days")) {
+			if (filemtime($file) < strtotime("-7 days")) {
 				unlink($file);
 			}
 		}
@@ -133,8 +134,7 @@ function rlm_render_admin_page()
 						Descargar log actual
 					</button>
 
-					<input name="days" type="number" min="1" placeholder="Días" class="border px-2 py-2 rounded" />
-					<button name="delete_old_logs" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">
+			<button name="delete_old_logs" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">
 						Borrar logs antiguos
 					</button>
 				</div>
